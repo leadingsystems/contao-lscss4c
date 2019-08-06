@@ -5,7 +5,7 @@ namespace LeadingSystems\Lscss4c;
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] .= ';{lscss4c_legend},lscss4c_lessFileToLoad,lscss4c_debugMode,lscss4c_noCache,lscss4c_noMinifier';
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['lscss4c_lessFileToLoad'] = array(
-	'label' => &$GLOBALS['TL_LANG']['tl_layout']['lscss4c_appToLoad'],
+	'label' => &$GLOBALS['TL_LANG']['tl_layout']['lscss4c_lessFileToLoad'],
 	'exclude' => true,
 	'inputType' => 'fileTree',
 	'eval' => array(
