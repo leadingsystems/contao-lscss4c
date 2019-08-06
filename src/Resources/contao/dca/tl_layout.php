@@ -13,7 +13,8 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['lscss4c_lessFileToLoad'] = array(
 		'tl_class'=>'clr',
 		'files' => true,
 		'filesOnly' => true,
-		'fieldType' => 'radio'
+		'fieldType' => 'radio',
+        'extensions'=>'less'
 	)
 );
 
