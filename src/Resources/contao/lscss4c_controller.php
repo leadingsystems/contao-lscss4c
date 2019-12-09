@@ -37,7 +37,7 @@ class lscss4C_controller extends \Controller {
 
             $arr_options = array
             (
-                'strictMath' => true,
+                'strictMath' => false,
                 'import_dirs' => array(TL_ROOT . '/' . $str_dirPath => $str_dirPath),
                 'sourceMap' => $GLOBALS['lscss4c_globals']['lscss4c_debugMode'],
                 'compress' => !$GLOBALS['lscss4c_globals']['lscss4c_noMinifier']
