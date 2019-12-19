@@ -2,10 +2,10 @@
 
 namespace LeadingSystems\Lscss4c;
 
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] .= ';{lscss4c_legend},lscss4c_lessFileToLoad,lscss4c_debugMode,lscss4c_noCache,lscss4c_noMinifier';
+$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] .= ';{lscss4c_legend},lscss4c_scssFileToLoad,lscss4c_debugMode,lscss4c_noCache,lscss4c_noMinifier';
 
-$GLOBALS['TL_DCA']['tl_layout']['fields']['lscss4c_lessFileToLoad'] = array(
-	'label' => &$GLOBALS['TL_LANG']['tl_layout']['lscss4c_lessFileToLoad'],
+$GLOBALS['TL_DCA']['tl_layout']['fields']['lscss4c_scssFileToLoad'] = array(
+	'label' => &$GLOBALS['TL_LANG']['tl_layout']['lscss4c_scssFileToLoad'],
 	'exclude' => true,
 	'inputType' => 'fileTree',
 	'eval' => array(
@@ -14,7 +14,7 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['lscss4c_lessFileToLoad'] = array(
 		'files' => true,
 		'filesOnly' => true,
 		'fieldType' => 'radio',
-        'extensions'=>'less'
+        'extensions'=>'scss'
 	)
 );
 
