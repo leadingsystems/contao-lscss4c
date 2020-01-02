@@ -8,6 +8,7 @@ class lscss4C_controller extends \Controller {
 
     private $str_pathToOutputFile = 'assets/css/lscss4c.css';
     private $str_pathToSourceMapFile = 'assets/css/lscss4c.map';
+    private $str_relativePathToSourceMapFile = 'lscss4c.map'; // relative from the css file's perspective
 
 	protected function __construct() {
 		parent::__construct();
@@ -47,7 +48,7 @@ class lscss4C_controller extends \Controller {
                     'sourceMapWriteTo'  => TL_ROOT . '/' . $this->str_pathToSourceMapFile,
 
                     // relative or full url to the above .map file
-                    'sourceMapURL'      => $this->str_pathToSourceMapFile,
+                    'sourceMapURL'      => $this->str_relativePathToSourceMapFile,
 
                     // (optional) relative or full url to the .css file
                     'sourceMapFilename' => $this->str_pathToOutputFile,
@@ -56,7 +57,7 @@ class lscss4C_controller extends \Controller {
                     'sourceMapBasepath' => TL_ROOT,
 
                     // (optional) prepended to 'source' field entries for relocating source files
-                    'sourceRoot'        => '',
+                    'sourceRoot'        => '/',
                 ]);
             }
 
