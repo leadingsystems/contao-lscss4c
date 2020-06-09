@@ -12,7 +12,8 @@
     "php": ">=7.0.0",
     "contao/core-bundle": "~4.4",
     "leadingsystems/contao-helpers": ">=2.0.0",
-    "leadingsystems/lscss": "^0.0.1"
+    "leadingsystems/lscss": "^0.0.1",
+    "scssphp/scssphp": "^1.0"
   },
   "autoload": {
     "psr-4": {
