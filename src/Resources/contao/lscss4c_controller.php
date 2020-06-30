@@ -6,9 +6,9 @@ use function LeadingSystems\Helpers\ls_getFilePathFromVariableSources;
 class lscss4C_controller extends \Controller {
     protected static $objInstance;
 
-    private $str_pathToOutputFile = 'assets/css/lscss4c.css';
-    private $str_pathToSourceMapFile = 'assets/css/lscss4c.map';
-    private $str_relativePathToSourceMapFile = 'lscss4c.map'; // relative from the css file's perspective
+    private $str_pathToOutputFile = 'assets/css/lscss4c_--inputFileHash--.css';
+    private $str_pathToSourceMapFile = 'assets/css/lscss4c_--inputFileHash--.map';
+    private $str_relativePathToSourceMapFile = 'lscss4c_--inputFileHash--.map'; // relative from the css file's perspective
 
 	protected function __construct() {
 		parent::__construct();
@@ -29,6 +29,11 @@ class lscss4C_controller extends \Controller {
 		if (!$GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']) {
 			return;
 		}
+
+		$str_inputFileHash = md5($GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']);
+		$this->str_pathToOutputFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToOutputFile);
+		$this->str_pathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToSourceMapFile);
+		$this->str_relativePathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_relativePathToSourceMapFile);
 
         if (
             !file_exists(TL_ROOT . '/' . $this->str_pathToOutputFile)
