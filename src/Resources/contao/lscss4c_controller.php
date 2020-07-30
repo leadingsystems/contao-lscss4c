@@ -66,12 +66,7 @@ class lscss4C_controller extends \Controller {
                 ]);
             }
 
-            $str_cssResult = $obj_scssCompiler->compile(file_get_contents(TL_ROOT . '/' . $str_filePath));
-
-            $obj_autoprefixer = new Autoprefixer($str_cssResult);
-            $str_cssResult = $obj_autoprefixer->compile();
-
-            file_put_contents(TL_ROOT . '/' . $this->str_pathToOutputFile, $str_cssResult);
+            file_put_contents(TL_ROOT . '/' . $this->str_pathToOutputFile, $obj_scssCompiler->compile(file_get_contents(TL_ROOT . '/' . $str_filePath)));
         }
 
         $GLOBALS['TL_CSS'][] = $this->str_pathToOutputFile;

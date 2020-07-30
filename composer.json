@@ -13,8 +13,7 @@
     "contao/core-bundle": "~4.4",
     "leadingsystems/contao-helpers": "^2.0.0",
     "leadingsystems/lscss": "^1.0.0",
-    "scssphp/scssphp": "^1.0",
-    "padaliyajay/php-autoprefixer": "^1.2"
+    "scssphp/scssphp": "^1.0"
   },
   "autoload": {
     "psr-4": {
