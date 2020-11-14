@@ -35,9 +35,12 @@ class lscss4C_controller extends \Controller {
 		$this->str_pathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToSourceMapFile);
 		$this->str_relativePathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_relativePathToSourceMapFile);
 
+		$bln_filesOrSettingsHaveChanged = $this->check_filesOrSettingsHaveChanged();
+
         if (
             !file_exists(TL_ROOT . '/' . $this->str_pathToOutputFile)
             || $GLOBALS['lscss4c_globals']['lscss4c_noCache']
+            || $bln_filesOrSettingsHaveChanged
         ) {
             $str_filePath = $GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad'];
             $str_dirPath = \dirname($str_filePath);
@@ -80,5 +83,82 @@ class lscss4C_controller extends \Controller {
 		$GLOBALS['lscss4c_globals']['lscss4c_noCache'] = $objLayout->lscss4c_noCache;
 
 		$GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] = $objLayout->lscss4c_noMinifier;
+
+		$GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash'] = trim($objLayout->lscss4c_pathsToConsiderForHash);
+
+		$GLOBALS['lscss4c_globals']['layoutId'] = $objLayout->id;
 	}
+
+	protected function check_filesOrSettingsHaveChanged() {
+	    $obj_dbres_storedHash = \Database::getInstance()
+            ->prepare("
+                SELECT lscss4c_cacheHash
+                FROM tl_layout
+                WHERE id = ?
+            ")
+            ->limit(1)
+            ->execute($GLOBALS['lscss4c_globals']['layoutId']);
+	    
+	    if (!$obj_dbres_storedHash->numRows) {
+	        return true;
+        }
+	    
+	    $str_storedHash = $obj_dbres_storedHash->first()->lscss4c_cacheHash;
+	    
+//        $float_utStart = microtime(true);
+
+	    $arr_pathsToCheck = explode(',', $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash']);
+
+	    $arr_pathHashes = [];
+
+	    foreach ($arr_pathsToCheck as $str_pathToCheck) {
+	        $arr_pathHashes[] = $this->hashDir(TL_ROOT. '/' . trim($str_pathToCheck));
+        }
+
+	    $str_currentHash = md5(implode('', $arr_pathHashes) . ($GLOBALS['lscss4c_globals']['lscss4c_debugMode'] ? '1' : '0') . ($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? '1' : '0') . $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash']);
+//        $float_runtime = microtime(true) - $float_utStart;
+//	    \LeadingSystems\Helpers\lsErrorLog('$str_currentHash', $str_currentHash, 'perm', 'var_dump');
+//	    \LeadingSystems\Helpers\lsErrorLog('$float_runtime', $float_runtime, 'perm', 'var_dump');
+	    
+	    if ($str_currentHash != $str_storedHash) {
+	        \Database::getInstance()
+                ->prepare("
+                    UPDATE tl_layout
+                    SET lscss4c_cacheHash = ?
+                    WHERE id = ?
+                ")
+                ->execute(
+                    $str_currentHash,
+                    $GLOBALS['lscss4c_globals']['layoutId']
+                );
+	        return true;
+        }
+    }
+
+    protected function hashDir($str_dir) {
+	    if (!is_dir($str_dir)) {
+	        return '';
+        }
+
+	    $arr_fileHashes = [];
+	    $obj_dir = dir($str_dir);
+
+	    while (false !== ($str_file = $obj_dir->read())) {
+	        if ($str_file == '.' || $str_file == '..') {
+	            continue;
+            }
+
+	        $str_filePath = $str_dir . '/' . $str_file;
+
+	        if (is_dir($str_filePath)) {
+	            $arr_fileHashes[] = $this->hashDir($str_filePath);
+            } else {
+	            $arr_fileHashes[] = md5_file($str_filePath);
+            }
+        }
+
+        $obj_dir->close();
+
+	    return md5(implode('', $arr_fileHashes));
+    }
 }
