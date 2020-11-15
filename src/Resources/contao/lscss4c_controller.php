@@ -47,9 +47,8 @@ class lscss4C_controller extends \Controller {
 
             $obj_scssCompiler = new \ScssPhp\ScssPhp\Compiler();
             $obj_scssCompiler->addImportPath(TL_ROOT . '/' . $str_dirPath);
-            $obj_scssCompiler->setFormatter($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? \ScssPhp\ScssPhp\Formatter\Nested::class : \ScssPhp\ScssPhp\Formatter\Compressed::class);
+            $obj_scssCompiler->setOutputStyle($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? \ScssPhp\ScssPhp\OutputStyle::EXPANDED : \ScssPhp\ScssPhp\OutputStyle::COMPRESSED);
             if ($GLOBALS['lscss4c_globals']['lscss4c_debugMode']) {
-                $obj_scssCompiler->setLineNumberStyle(\ScssPhp\ScssPhp\Compiler::LINE_COMMENTS);
                 $obj_scssCompiler->setSourceMap(\ScssPhp\ScssPhp\Compiler::SOURCE_MAP_FILE);
                 $obj_scssCompiler->setSourceMapOptions([
                     // absolute path to write .map file
