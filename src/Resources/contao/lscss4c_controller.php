@@ -164,7 +164,11 @@ class lscss4C_controller extends \Controller {
 	        if (is_dir($str_filePath)) {
 	            $arr_fileHashes[] = $this->hashDir($str_filePath);
             } else {
-	            $arr_fileHashes[] = md5_file($str_filePath);
+                $arr_pathParts = pathinfo($str_filePath);
+                // only consider scss files
+                if ($arr_pathParts['extension'] === 'scss') {
+                    $arr_fileHashes[] = md5_file($str_filePath);
+                }
             }
         }
 
