@@ -25,17 +25,17 @@ class lscss4C_controller extends \Controller {
 		return self::$objInstance;
 	}
 
-	public function insertLscss() {
-		if (!$GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']) {
-			return;
-		}
+	private function compileLscss() {
+        if (!$GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']) {
+            return;
+        }
 
-		$str_inputFileHash = md5($GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']);
-		$this->str_pathToOutputFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToOutputFile);
-		$this->str_pathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToSourceMapFile);
-		$this->str_relativePathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_relativePathToSourceMapFile);
+        $str_inputFileHash = md5($GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']);
+        $this->str_pathToOutputFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToOutputFile);
+        $this->str_pathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_pathToSourceMapFile);
+        $this->str_relativePathToSourceMapFile = str_replace('--inputFileHash--', $str_inputFileHash, $this->str_relativePathToSourceMapFile);
 
-		$bln_filesOrSettingsHaveChanged = $this->check_filesOrSettingsHaveChanged();
+        $bln_filesOrSettingsHaveChanged = $this->check_filesOrSettingsHaveChanged();
 
         if (
             !file_exists(TL_ROOT . '/' . $this->str_pathToOutputFile)
@@ -82,8 +82,29 @@ class lscss4C_controller extends \Controller {
 
             file_put_contents(TL_ROOT . '/' . $this->str_pathToOutputFile, $obj_scssCompiler->compile(file_get_contents(TL_ROOT . '/' . $str_filePath)));
         }
+    }
 
+	public function insertLscss() {
+        if (!$GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad']) {
+            return;
+        }
+
+        $this->compileLscss();
         $GLOBALS['TL_CSS'][] = $this->str_pathToOutputFile;
+    }
+
+	public function getLscss($str_scssFileToLoad = '', $bln_noCache = true, $bln_noMinifier = true, $bln_debugMode = true) {
+	    \LeadingSystems\Helpers\lsErrorLog('$str_scssFileToLoad', $str_scssFileToLoad, 'perm', 'var_dump');
+	    \LeadingSystems\Helpers\lsErrorLog('$bln_noCache', $bln_noCache, 'perm', 'var_dump');
+	    \LeadingSystems\Helpers\lsErrorLog('$bln_noMinifier', $bln_noMinifier, 'perm', 'var_dump');
+	    \LeadingSystems\Helpers\lsErrorLog('$bln_debugMode', $bln_debugMode, 'perm', 'var_dump');
+        $GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad'] = $str_scssFileToLoad;
+        $GLOBALS['lscss4c_globals']['lscss4c_noCache'] = $bln_noCache;
+        $GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] = $bln_noMinifier;
+        $GLOBALS['lscss4c_globals']['lscss4c_debugMode'] = $bln_debugMode;
+
+        $this->compileLscss();
+        return $this->str_pathToOutputFile;
     }
 
 	public function getLayoutSettingsForGlobalUse(\PageModel $objPage, \LayoutModel $objLayout, \PageRegular $objPageRegular) {
@@ -101,6 +122,19 @@ class lscss4C_controller extends \Controller {
 	}
 
 	protected function check_filesOrSettingsHaveChanged() {
+	    if (TL_MODE == 'BE') {
+	        /*
+	         * Since we don't have a layout record when lscss4c is used in the backend, storing the cacheHash
+	         * and checking for changed files or settings isn't possible. As a fallback this function returns false
+	         * in this case which means that if the cache is being used it won't be refreshed even if files or
+	         * settings have changed. This means that in the backend we either use the cache or we don't. There
+	         * is no automatic cache refresh.
+	         *
+	         * Of course, this is something that could be improved in the future if it seems necessary.
+	         */
+	        return false;
+        }
+
 	    $obj_dbres_storedHash = \Database::getInstance()
             ->prepare("
                 SELECT lscss4c_cacheHash
