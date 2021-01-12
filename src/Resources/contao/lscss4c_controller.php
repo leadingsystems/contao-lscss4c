@@ -94,10 +94,6 @@ class lscss4C_controller extends \Controller {
     }
 
 	public function getLscss($str_scssFileToLoad = '', $bln_noCache = true, $bln_noMinifier = true, $bln_debugMode = true) {
-	    \LeadingSystems\Helpers\lsErrorLog('$str_scssFileToLoad', $str_scssFileToLoad, 'perm', 'var_dump');
-	    \LeadingSystems\Helpers\lsErrorLog('$bln_noCache', $bln_noCache, 'perm', 'var_dump');
-	    \LeadingSystems\Helpers\lsErrorLog('$bln_noMinifier', $bln_noMinifier, 'perm', 'var_dump');
-	    \LeadingSystems\Helpers\lsErrorLog('$bln_debugMode', $bln_debugMode, 'perm', 'var_dump');
         $GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad'] = $str_scssFileToLoad;
         $GLOBALS['lscss4c_globals']['lscss4c_noCache'] = $bln_noCache;
         $GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] = $bln_noMinifier;
