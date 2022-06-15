@@ -47,6 +47,7 @@ class lscss4C_controller extends \Controller {
 
             $obj_scssCompiler = new \ScssPhp\ScssPhp\Compiler();
             $obj_scssCompiler->addImportPath(TL_ROOT . '/' . $str_dirPath);
+            $obj_scssCompiler->addImportPath(TL_ROOT);
 
             /*
              * Because at the moment scssphp 1.4 conflicts with contao, we still have to support scssphp 1.3 but want
