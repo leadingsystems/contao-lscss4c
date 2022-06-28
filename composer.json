@@ -9,7 +9,7 @@
   "type": "contao-bundle",
   "license": "proprietary",
   "require": {
-    "php": "^7.0.0",
+    "php": "^7.0.0 || ^8.0.0 ",
     "contao/core-bundle": "~4.4",
     "leadingsystems/contao-helpers": "^2.0.0",
     "leadingsystems/lscss": "^1.0.0",
