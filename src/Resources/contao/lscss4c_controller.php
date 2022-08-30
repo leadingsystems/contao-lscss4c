@@ -154,7 +154,11 @@ class lscss4C_controller extends \Controller {
 	    $arr_pathHashes = [];
 
 	    foreach ($arr_pathsToCheck as $str_pathToCheck) {
-	        $arr_pathHashes[] = $this->hashDir(TL_ROOT. '/' . trim($str_pathToCheck));
+            $str_pathToCheck = trim($str_pathToCheck);
+            if (empty($str_pathToCheck)) {
+                continue;
+            }
+	        $arr_pathHashes[] = $this->hashDir(TL_ROOT. '/' . $str_pathToCheck);
         }
 
 	    $str_currentHash = md5(implode('', $arr_pathHashes) . ($GLOBALS['lscss4c_globals']['lscss4c_debugMode'] ? '1' : '0') . ($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? '1' : '0') . $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash']);
