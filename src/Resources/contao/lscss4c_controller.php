@@ -14,7 +14,7 @@ class lscss4C_controller extends \Controller {
 		parent::__construct();
 	}
 
-	final private function __clone() {
+	private function __clone() {
 		
 	}
 
