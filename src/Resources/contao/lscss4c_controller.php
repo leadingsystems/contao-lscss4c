@@ -2,6 +2,7 @@
 
 namespace LeadingSystems\Lscss4c;
 use function LeadingSystems\Helpers\ls_getFilePathFromVariableSources;
+use Contao\System;
 
 class lscss4C_controller extends \Controller {
     protected static $objInstance;
@@ -38,7 +39,7 @@ class lscss4C_controller extends \Controller {
         $bln_filesOrSettingsHaveChanged = $this->check_filesOrSettingsHaveChanged();
 
         if (
-            !file_exists(TL_ROOT . '/' . $this->str_pathToOutputFile)
+            !file_exists(System::getContainer()->getParameter('kernel.project_dir') . '/' . $this->str_pathToOutputFile)
             || $GLOBALS['lscss4c_globals']['lscss4c_noCache']
             || $bln_filesOrSettingsHaveChanged
         ) {
@@ -46,8 +47,8 @@ class lscss4C_controller extends \Controller {
             $str_dirPath = \dirname($str_filePath);
 
             $obj_scssCompiler = new \ScssPhp\ScssPhp\Compiler();
-            $obj_scssCompiler->addImportPath(TL_ROOT . '/' . $str_dirPath);
-            $obj_scssCompiler->addImportPath(TL_ROOT);
+            $obj_scssCompiler->addImportPath(System::getContainer()->getParameter('kernel.project_dir') . '/' . $str_dirPath);
+            $obj_scssCompiler->addImportPath(System::getContainer()->getParameter('kernel.project_dir'));
 
             /*
              * Because at the moment scssphp 1.4 conflicts with contao, we still have to support scssphp 1.3 but want
@@ -65,7 +66,7 @@ class lscss4C_controller extends \Controller {
                 $obj_scssCompiler->setSourceMap(\ScssPhp\ScssPhp\Compiler::SOURCE_MAP_FILE);
                 $obj_scssCompiler->setSourceMapOptions([
                     // absolute path to write .map file
-                    'sourceMapWriteTo'  => TL_ROOT . '/' . $this->str_pathToSourceMapFile,
+                    'sourceMapWriteTo'  => System::getContainer()->getParameter('kernel.project_dir') . '/' . $this->str_pathToSourceMapFile,
 
                     // relative or full url to the above .map file
                     'sourceMapURL'      => $this->str_relativePathToSourceMapFile,
@@ -74,14 +75,14 @@ class lscss4C_controller extends \Controller {
                     'sourceMapFilename' => $this->str_pathToOutputFile,
 
                     // partial path (server root) removed (normalized) to create a relative url
-                    'sourceMapBasepath' => TL_ROOT,
+                    'sourceMapBasepath' => System::getContainer()->getParameter('kernel.project_dir'),
 
                     // (optional) prepended to 'source' field entries for relocating source files
                     'sourceRoot'        => '/',
                 ]);
             }
 
-            file_put_contents(TL_ROOT . '/' . $this->str_pathToOutputFile, $obj_scssCompiler->compile(file_get_contents(TL_ROOT . '/' . $str_filePath)));
+            file_put_contents(System::getContainer()->getParameter('kernel.project_dir') . '/' . $this->str_pathToOutputFile, $obj_scssCompiler->compile(file_get_contents(System::getContainer()->getParameter('kernel.project_dir') . '/' . $str_filePath)));
         }
     }
 
@@ -158,7 +159,7 @@ class lscss4C_controller extends \Controller {
             if (empty($str_pathToCheck)) {
                 continue;
             }
-	        $arr_pathHashes[] = $this->hashDir(TL_ROOT. '/' . $str_pathToCheck);
+	        $arr_pathHashes[] = $this->hashDir(System::getContainer()->getParameter('kernel.project_dir'). '/' . $str_pathToCheck);
         }
 
 	    $str_currentHash = md5(implode('', $arr_pathHashes) . ($GLOBALS['lscss4c_globals']['lscss4c_debugMode'] ? '1' : '0') . ($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? '1' : '0') . $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash']);
