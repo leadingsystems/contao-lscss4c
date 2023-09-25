@@ -120,7 +120,7 @@ class lscss4C_controller extends \Controller {
 	}
 
 	protected function check_filesOrSettingsHaveChanged() {
-	    if (System::getContainer()->get('merconis.routing.scope_matcher')->isBackend()) {
+	    if (System::getContainer()->get('merconis.routing.scope')->isBackend()) {
 	        /*
 	         * Since we don't have a layout record when lscss4c is used in the backend, storing the cacheHash
 	         * and checking for changed files or settings isn't possible. As a fallback this function returns false
