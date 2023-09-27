@@ -3,6 +3,7 @@
 namespace LeadingSystems\Lscss4c;
 use function LeadingSystems\Helpers\ls_getFilePathFromVariableSources;
 use Contao\System;
+use Symfony\Component\HttpFoundation\Request;
 
 class lscss4C_controller extends \Controller {
     protected static $objInstance;
@@ -120,7 +121,11 @@ class lscss4C_controller extends \Controller {
 	}
 
 	protected function check_filesOrSettingsHaveChanged() {
-	    if (System::getContainer()->get('merconis.routing.scope')->isBackend()) {
+	    if (
+            System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(
+                System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create('')
+            )
+        ) {
 	        /*
 	         * Since we don't have a layout record when lscss4c is used in the backend, storing the cacheHash
 	         * and checking for changed files or settings isn't possible. As a fallback this function returns false
