@@ -2,7 +2,6 @@
 
 namespace LeadingSystems\Lscss4c;
 
-use function LeadingSystems\Helpers\ls_getFilePathFromVariableSources;
 use Contao\System;
 
 class lscss4C_controller extends \Controller {
@@ -104,20 +103,6 @@ class lscss4C_controller extends \Controller {
 
         $this->compileLscss();
         return $this->str_pathToOutputFile;
-    }
-
-    public function getLayoutSettingsForGlobalUse(\PageModel $objPage, \LayoutModel $objLayout, \PageRegular $objPageRegular) {
-        $GLOBALS['lscss4c_globals']['lscss4c_scssFileToLoad'] = ls_getFilePathFromVariableSources($objLayout->lscss4c_scssFileToLoad);
-
-        $GLOBALS['lscss4c_globals']['lscss4c_debugMode'] = $objLayout->lscss4c_debugMode;
-
-        $GLOBALS['lscss4c_globals']['lscss4c_noCache'] = $objLayout->lscss4c_noCache;
-
-        $GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] = $objLayout->lscss4c_noMinifier;
-
-        $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash'] = trim($objLayout->lscss4c_pathsToConsiderForHash);
-
-        $GLOBALS['lscss4c_globals']['layoutId'] = $objLayout->id;
     }
 
     protected function check_filesOrSettingsHaveChanged()

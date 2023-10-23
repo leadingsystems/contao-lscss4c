@@ -1,0 +1,12 @@
+services:
+
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  LeadingSystems\LSCSS4CBundle\Compiler\Compiler: ~
+
+  LeadingSystems\LSCSS4CBundle\EventListener\GetPageLayoutListener:
+    tags:
+      - { name: contao.hook, hook: getPageLayout, method: getLayoutSettingsForGlobalUse }
