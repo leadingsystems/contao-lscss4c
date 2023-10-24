@@ -5,8 +5,19 @@ services:
     autoconfigure: true
     public: false
 
-  LeadingSystems\LSCSS4CBundle\Compiler\Compiler: ~
+  LeadingSystems\LSCSS4CBundle\Compiler\Compiler:
+    public: true
+    arguments:
+      - '@request_stack'
+      - '@contao.routing.scope_matcher'
+      - '%kernel.project_dir%'
 
   LeadingSystems\LSCSS4CBundle\EventListener\GetPageLayoutListener:
     tags:
       - { name: contao.hook, hook: getPageLayout, method: getLayoutSettingsForGlobalUse }
+
+  LeadingSystems\LSCSS4CBundle\EventListener\GeneratePageListener:
+    arguments:
+      - '%kernel.project_dir%'
+    tags:
+      - { name: contao.hook, hook: generatePage, method: insertLscss }
