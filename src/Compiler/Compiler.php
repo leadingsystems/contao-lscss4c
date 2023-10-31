@@ -78,6 +78,10 @@ class Compiler
                     'sourceRoot'        => '/',
                 ]);
             }
+
+            /*
+             * @toDo: replace deprecated function compile()
+             */
             file_put_contents($this->projectDir . '/' . $this->str_pathToOutputFile, $obj_scssCompiler->compile(file_get_contents($this->projectDir . '/' . $str_filePath)));
         }
 
