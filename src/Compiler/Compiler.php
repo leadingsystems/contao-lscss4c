@@ -4,6 +4,7 @@ namespace LeadingSystems\LSCSS4CBundle\Compiler;
 
 
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\Database;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Compiler
@@ -128,7 +129,7 @@ class Compiler
             return false;
         }
 
-        $obj_dbres_storedHash = \Database::getInstance()
+        $obj_dbres_storedHash = Database::getInstance()
             ->prepare("
                 SELECT lscss4c_cacheHash
                 FROM tl_layout
@@ -158,7 +159,7 @@ class Compiler
         $str_currentHash = md5(implode('', $arr_pathHashes) . ($GLOBALS['lscss4c_globals']['lscss4c_debugMode'] ? '1' : '0') . ($GLOBALS['lscss4c_globals']['lscss4c_noMinifier'] ? '1' : '0') . $GLOBALS['lscss4c_globals']['lscss4c_pathsToConsiderForHash']);
 
         if ($str_currentHash != $str_storedHash) {
-            \Database::getInstance()
+            Database::getInstance()
                 ->prepare("
                     UPDATE tl_layout
                     SET lscss4c_cacheHash = ?

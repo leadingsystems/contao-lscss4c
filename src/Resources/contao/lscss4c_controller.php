@@ -2,10 +2,11 @@
 
 namespace LeadingSystems\Lscss4c;
 
+use Contao\Controller;
 use Contao\System;
 use LeadingSystems\LSCSS4CBundle\Compiler\Compiler;
 
-class lscss4C_controller extends \Controller {
+class lscss4C_controller extends Controller {
     protected static $objInstance;
 
     protected function __construct() {
