@@ -1,6 +1,9 @@
 Leading Systems LSCSS4C bundle for Contao changelog
 ===========================================
 
+##### 1.1.2 (2025-01-29)
+ * fix composer.json
+
 ##### 1.1.1 (2025-01-23)
  * fix some issues for Contao 5
 

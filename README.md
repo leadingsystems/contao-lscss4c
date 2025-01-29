@@ -1,4 +1,4 @@
-# Leading Systems LSCSS4C bundle for Contao 4
+# Leading Systems LSCSS4C bundle for Contao
 
 LSCSS4C simplifies the usage of LSCSS in Contao.
 
